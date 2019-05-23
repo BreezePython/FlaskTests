@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智能显示时间</title>
+    {% for time in timeList %}
+        <ul>
+            <li>
+                <p>{{time}}</p>
+                <p>{{time|time_filter}}</p>
+            </li>
+
+        </ul>
+    {% endfor %}
+</head>
+<body>
+
+</body>
+</html>
