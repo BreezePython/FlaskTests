@@ -3,7 +3,7 @@
 # @JianShu  : 一梦七年诗
 # @Date     : 2019/5/23 23:56
 # @Software : PyCharm
-# @version  ：Python 3.6.8
+# @version  ：Python 3.FlaskAjax.6.8
 # @File     : MultiplicationTables.py
 
 from flask import Flask, render_template

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Flask Login Test</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static',filename='bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static',filename='signin.css') }}" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $("#submit").click(function (event) {
+                event.preventDefault();
+                var userInput = $('input[name="user"]');
+                var user = userInput.val();
+                var pwdInput = $("input[name='pwd']");
+                var pwd = pwdInput.val();
+                $.post({
+                    'url': '/login',
+                    'data': {
+                        'user': user,
+                        'pwd': pwd
+                    },
+                    "success": function (data) {
+                        if (data['code'] == 200) {
+                            window.location = '/home'
+                        } else {
+                            var error = data['error'];
+                            $("#error").html(error);
+                            $("#error").show();
+                        }
+                    },
+                    'fail': function (error) {
+                        consle.log(error)
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <form class="form-signin" method="post">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="inputName" class="sr-only">Email address</label>
+        <input type="text" id="inputName" class="form-control" placeholder="user" name="user" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" name="pwd" placeholder="Password" required>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+        <p class="text-danger" style="display:none" id="error"></p>
+        <button class="btn btn-lg btn-primary btn-block" id="submit" type="submit">Sign in</button>
+    </form>
+
+</div>
+</body>
+</html>
