@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{{url_for('static',filename='favicon.ico')}}">
+    <title>父子学习认国旗</title>
+    <!-- Bootstrap core CSS -->
+    <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{{url_for('static',filename='css/cover.css')}}" rel="stylesheet">
+    <script type="text/javascript">
+    function display(id) {
+        var traget = document.getElementById(id);
+        if (traget.style.display == "none") {
+            traget.style.display = "";
+        } else {
+            traget.style.display = "none";
+        }
+    }
+    </script>
+</head>
+
+<body>
+    <div class="site-wrapper">
+        <div class="site-wrapper-inner">
+            <div class="cover-container">
+                <div class="masthead clearfix">
+                    <row>
+                        <h1 class="cover-heading">父子学习认国旗</h1>
+                        <div class="inner">
+                            <p><img src="{{url_for('static',filename='images/%s.gif'|format(content[1]))}}" class="img-rounded"></p>
+                            <p> <input type="submit" class="btn  btn-success" value="查看详情..." onclick="display('lb')"></p>
+                        </div>
+                        <div class="inner cover">
+                            <div id="lb" class="inner cover" style="display:none">
+                                <div>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>国家：</td>
+                                                <td>{{content[1]}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>首都：</td>
+                                                <td>{{content[2]}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>人口：</td>
+                                                <td>{{content[3]}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>面积</td>
+                                                <td>{{content[4]}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </row>
+                    <div class="mastfoot">
+                        {%if content[0] ==1%}
+                        <a href="" disabled="disabled" class="btn btn-primary btn-sm">上一页</a>
+                        {%else%}
+                        <a href="{{url_for('index',country_id=content[0]-1)}}" class="btn btn-primary btn-sm">上一页</a>
+                        {%endif%}
+                        <a href="{{url_for('index',country_id=content[0]+1)}}" class="btn btn-primary btn-sm">下一页</a>
+                        <div class="inner">
+                            <p>by <a href="https://www.jianshu.com/u/d23fd5012bed">清风Python</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
