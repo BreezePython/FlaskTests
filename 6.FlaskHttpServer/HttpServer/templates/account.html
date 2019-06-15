@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Flask Http Server</title>
+    <link rel="icon" href="{{ url_for('static',filename='img/favicon.ico') }}">
+    <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/signin.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script>
+        $(function () {
+            $("#submit").click(function (event) {
+                event.preventDefault();
+                var userInput = $('input[name="user"]');
+                var user = userInput.val();
+                var pwdInput = $("input[name='pwd']");
+                var pwd = pwdInput.val();
+                $.post({
+                    'url': '/manage/login',
+                    'data': {
+                        'user': user,
+                        'pwd': pwd
+                    },
+                    "success": function (data) {
+                        if (data['code'] == 200) {
+                            window.location = '/index'
+                        } else {
+                            var error = data['error'];
+                            $("#error").html(error);
+                            $("#error").show();
+                        }
+                    },
+                    'fail': function (error) {
+                        consle.log(error)
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <form class="form-signin" method="post">
+        <h3 class="form-signin-heading">欢迎访问 Flask Http Server</h3>
+        <label for="inputName" class="sr-only">用户名</label>
+        <input type="text" id="inputName" class="form-control" placeholder="用户名" name="user" required autofocus>
+        <label for="inputPassword" class="sr-only">密码</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="密码" name="pwd" required>
+
+        <button class="btn btn-lg btn-primary btn-block" id="submit" type="submit">Login</button>
+
+        <p class="text-danger" style="display:none" id="error"></p>
+    </form>
+
+</div>
+</body>
+</html>
