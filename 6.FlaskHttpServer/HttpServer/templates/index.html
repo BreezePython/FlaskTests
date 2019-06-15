@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Http Server</title>
+    <link rel="icon" href="{{ url_for('static',filename='img/favicon.ico') }}">
+    <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='css/index.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+</head>
+<body>
+<div class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <div class="navbar-brand">
+
+                Flask Http Server
+            </div>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('home.index') }}">首页</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="{{ url_for('account.logout') }}">退出</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="container">
+    {% if error_info %}
+        <p class="text-danger" id="error">{{ error_info }}</p>
+    {% endif %}
+
+    {% if not path %}
+        <h4>当前路径：/ </h4>
+    {% else %}
+        <h4>当前路径：
+            {% for p in path|split_path %}
+                <span>/</span>
+                <a href="{{ url_for('home.index',path_uri=p[1]) }}">{{ p[0] }}</a>
+            {% endfor %}
+        </h4>
+    {% endif %}
+    <table class="table table-striped table-hover">
+        <thead>
+        <td>#</td>
+        <td>名称</td>
+        <td>修改时间</td>
+        <td>类型</td>
+        <td>大小</td>
+        </thead>
+        <tbody>
+        {% for dir in dirs %}
+            <tr>
+                <td> {{ loop.index }}</td>
+                {% if not path %}
+                    {% set link_uri = dir[0]|string %}
+                {% else %}
+                    {% set link_uri = path + '/' + dir[0]|string %}
+                {% endif %}
+                <td><a href="{{ url_for('home.index',path_uri=link_uri) }}">{{ dir[0] }}</a></td>
+                <td>{{ dir[1] }}</td>
+                <td>{{ dir[2] }}</td>
+                <td>{{ dir[3] }}</td>
+            </tr>
+        {% endfor %}
+        {% for file in files %}
+            <tr>
+                <td> {{ loop.index }}</td>
+                {% if not path %}
+                    <td><a href="{{ url_for('home.download',filename=file[0]) }}">{{ file[0] }}</a></td>
+                {% else %}
+                    <td><a href="{{ url_for('home.download',path=path,filename=file[0]) }}">{{ file[0] }}</a></td>
+                {% endif %}
+                <td>{{ file[1] }}</td>
+                <td>{{ file[2] }}</td>
+                <td>{{ file[3] }}</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>
