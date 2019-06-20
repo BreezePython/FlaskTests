@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>聪明的奥特曼</title>
+    <link rel="icon" href="../static/favicon.ico">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='index.css')}}">
+</head>
+
+<body>
+
+<div class="container">
+    <div>
+        <h2 class="clearfix text-center">聪明的奥特曼</h2>
+    </div>
+    <button class="control btn btn-primary btn-lg btn-block">点击开始游戏</button>
+    {% for num in num_list%}
+    <div class="col-xs-4 card">
+        <div id="{{loop.index0}}" class="box" hidden> {{num}}</div>
+    </div>
+    {%endfor%}
+</div>
+
+<script type="text/javascript">
+    console.log({{num_list}});
+    var second = 3;
+    var number = 1;
+    $('.control').on('click', function () {
+        $('.box').show();
+        $('.control').attr('disabled', true);
+        var time = setInterval(function () {
+            if (second > 0) {
+                $('.control').text('请记住从1-9的数字位置，倒计时' + second + '秒');
+                second--;
+            } else {
+                $('.control').text('请按照记忆点击数字1-9的位置');
+                $('.box').text('点我');
+                clearInterval(time);
+            }
+        }, 1000);
+    });
+    $(document).mousedown(function (e) {
+        var num_array = {{num_list}};
+        var element = $(e.target);
+        if (element.attr('class') == 'box' && element.text() == '点我') {
+            var id = element.attr('id');
+            if (num_array[id] == number){
+            $('#'+id).text('正确:'+num_array[id]);
+            if (number==9){
+                alert("游戏结束，你简直太厉害了...");
+            }
+            else{number++;}
+            }
+            else if (number==10) {
+
+            }else{
+                $('#'+id).text('错误:'+num_array[id]);
+                alert('选择错误，游戏结束...');
+                $('.control').attr('disabled', false);
+                $('.control').text('再来一次...');
+    }
+        }
+    })
+</script>
+</body>
+
+</html>
