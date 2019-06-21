@@ -11,12 +11,17 @@
 </head>
 
 <body>
+ <div class="images" style="display: none">
+ </div>
+
 
 <div class="container">
-    <div>
+
         <h2 class="clearfix text-center">聪明的奥特曼</h2>
-    </div>
+
+
     <button class="control btn btn-primary btn-lg btn-block">点击开始游戏</button>
+
     {% for num in num_list%}
     <div class="col-xs-4 card">
         <div id="{{loop.index0}}" class="box" hidden> {{num}}</div>
@@ -49,17 +54,18 @@
             var id = element.attr('id');
             if (num_array[id] == number){
             $('#'+id).text('正确:'+num_array[id]);
-            if (number==9){
-                alert("游戏结束，你简直太厉害了...");
+            if (number=={{num_list|count}}){
+                $('.container').hide();
+                $('.images').show();
+                alert("恭喜你通关，太厉害了！")
+
             }
             else{number++;}
-            }
-            else if (number==10) {
-
-            }else{
+            } else{
                 $('#'+id).text('错误:'+num_array[id]);
                 alert('选择错误，游戏结束...');
                 $('.control').attr('disabled', false);
+                number = 1;
                 $('.control').text('再来一次...');
     }
         }

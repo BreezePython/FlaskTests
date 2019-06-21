@@ -20,3 +20,12 @@
     width: 100%;
     text-align: center;
 }
+
+div.images {
+    height: 430px;
+    background-repeat: no-repeat;
+    display: block;
+    margin: 0 auto;
+    background-position: center center;
+    background-image: url('../static/11.png');
+}
