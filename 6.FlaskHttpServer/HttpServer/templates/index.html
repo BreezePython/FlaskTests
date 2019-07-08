@@ -7,13 +7,14 @@
     <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static',filename='css/index.css') }}" rel="stylesheet">
     <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+
 </head>
 <body>
 <div class="navbar navbar-default">
     <div class="container">
         <div class="navbar-header">
             <div class="navbar-brand">
-
                 Flask Http Server
             </div>
         </div>
@@ -22,25 +23,46 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
+            <li><a class="nav navbar-nav navbar-right" data-toggle="modal" data-target="#myModal">上传文件</a></li>
             <li><a href="{{ url_for('account.logout') }}">退出</a></li>
         </ul>
     </div>
 </div>
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">
+                    请选择所需上传的本地文件
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id="upload-form" enctype="multipart/form-data">
+                    <input id='file' class="btn btn-info" name="upload_file" type="file">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id='upload' class="btn btn-primary ">上传</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     {% if error_info %}
-        <p class="text-danger" id="error">{{ error_info }}</p>
+    <p class="text-danger" id="error">{{ error_info }}</p>
     {% endif %}
-
     {% if not path %}
-        <h4>当前路径：/ </h4>
+    <h4>当前路径：/ </h4>
     {% else %}
-        <h4>当前路径：
-            {% for p in path|split_path %}
-                <span>/</span>
-                <a href="{{ url_for('home.index',path_uri=p[1]) }}">{{ p[0] }}</a>
-            {% endfor %}
-        </h4>
+    <h4>当前路径：
+        {% for p in path|split_path %}
+        <span>/</span>
+        <a href="{{ url_for('home.index',path_uri=p[1]) }}">{{ p[0] }}</a>
+        {% endfor %}
+    </h4>
     {% endif %}
     <table class="table table-striped table-hover">
         <thead>
@@ -52,37 +74,62 @@
         </thead>
         <tbody>
         {% for dir in dirs %}
-            <tr>
-                <td> {{ loop.index }}</td>
-                {% if not path %}
-                    {% set link_uri = dir[0]|string %}
-                {% else %}
-                    {% set link_uri = path + '/' + dir[0]|string %}
-                {% endif %}
-                <td><a href="{{ url_for('home.index',path_uri=link_uri) }}">{{ dir[0] }}</a></td>
-                <td>{{ dir[1] }}</td>
-                <td>{{ dir[2] }}</td>
-                <td>{{ dir[3] }}</td>
-            </tr>
+        <tr>
+            <td> {{ loop.index }}</td>
+            {% if not path %}
+            {% set link_uri = dir[0]|string %}
+            {% else %}
+            {% set link_uri = path + '/' + dir[0]|string %}
+            {% endif %}
+            <td><a href="{{ url_for('home.index',path_uri=link_uri) }}">{{ dir[0] }}</a></td>
+            <td>{{ dir[1] }}</td>
+            <td>{{ dir[2] }}</td>
+            <td>{{ dir[3] }}</td>
+        </tr>
         {% endfor %}
         {% for file in files %}
-            <tr>
-                <td> {{ loop.index }}</td>
-                {% if not path %}
-                    <td><a href="{{ url_for('home.download',filename=file[0]) }}">{{ file[0] }}</a></td>
-                {% else %}
-                    <td><a href="{{ url_for('home.download',path=path,filename=file[0]) }}">{{ file[0] }}</a></td>
-                {% endif %}
-                <td>{{ file[1] }}</td>
-                <td>{{ file[2] }}</td>
-                <td>{{ file[3] }}</td>
-            </tr>
+        <tr>
+            <td> {{ loop.index }}</td>
+            {% if not path %}
+            <td><a href="{{ url_for('home.download',filename=file[0]) }}">{{ file[0] }}</a></td>
+            {% else %}
+            <td><a href="{{ url_for('home.download',path=path,filename=file[0]) }}">{{ file[0] }}</a></td>
+            {% endif %}
+            <td>{{ file[1] }}</td>
+            <td>{{ file[2] }}</td>
+            <td>{{ file[3] }}</td>
+        </tr>
         {% endfor %}
 
         </tbody>
     </table>
 </div>
 
-
+<script>
+    $('#upload').click(function () {
+        var upload_path = {{path|tojson|safe}};
+        var formData = new FormData($('#upload-form')[0]);
+        formData.append("upload_path", upload_path);
+        $.post({
+            url: '/upload',
+            dataType: 'json',
+            type: 'POST',
+            data: formData,
+            async: true,
+            cashe: false,
+            contentType: false,
+            processData: false,
+            success: function (returndata) {
+                if(returndata['code'] == 200){
+                    var info = returndata['info']
+                    alert(info);
+                }
+            },
+            error: function (returndata) {
+                alert("上传失败！")
+            }
+        })
+    });
+</script>
 </body>
 </html>

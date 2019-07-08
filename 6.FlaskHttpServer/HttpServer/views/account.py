@@ -23,7 +23,7 @@ def login():
     else:
         user = request.form.get('user')
         pwd = request.form.get('pwd')
-        if user == 'qingfeng' and pwd == '123':
+        if user == 'qingfeng' and pwd == 'python':
             session['user'] = user
             return jsonify({"code": 200, "error": ""})
         else:

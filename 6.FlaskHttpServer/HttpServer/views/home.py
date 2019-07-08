@@ -6,7 +6,7 @@
 # @version  ：Python 3.6.8
 # @File     : home.py
 
-from flask import Blueprint, render_template, current_app, send_from_directory
+from flask import Blueprint, render_template, current_app, send_from_directory, request, jsonify
 import os
 import time
 
@@ -63,6 +63,19 @@ def download(filename, path=None):
     else:
         real_path = os.path.join(current_app.config['BASEDIR'], path)
     return send_from_directory(real_path, filename, mimetype='application/octet-stream')
+
+
+@home.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'GET':
+        return "is upload file ... "
+    else:
+        path = request.form.get('upload_path')
+        file = request.files['upload_file']
+        file_name = file.filename
+        base_dir = current_app.config['BASEDIR']
+        file.save(os.path.join(base_dir, path, file_name))
+        return jsonify({"code": 200, "info": "文件：%s 上传成功" % file_name})
 
 
 @home.errorhandler(500)

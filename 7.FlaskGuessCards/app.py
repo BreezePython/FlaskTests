@@ -14,9 +14,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    number_list = random.sample(list(range(1, 10)), 9)
+    number_list = random.sample(list(range(1, 7)), 6)
     return render_template('index.html', num_list=number_list)
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=90)
+    app.run(host='0.0.0.0',port=5000)
