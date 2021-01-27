@@ -5,8 +5,10 @@
 # @Software : PyCharm
 # @version  ：Python 3.6.8
 # @File     : settings.py
+from datetime import timedelta
 
 
 class BasicConfig:
-    BASEDIR = 'F:/Working~Study'
+    BASEDIR = 'e:'
     SECRET_KEY = "Can't not guess it ."
+    SEND_FILE_MAX_AGE_DEFAULT = timedelta(seconds=1)
